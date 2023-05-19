@@ -1,7 +1,10 @@
 package com.skillup.profilemanagementservice.services;
 
 import com.skillup.profilemanagementservice.dto.LaboratoryDTO;
+import com.skillup.profilemanagementservice.dto.LaboratoryServiceDTO;
 import com.skillup.profilemanagementservice.models.Laboratory;
+import com.skillup.profilemanagementservice.models.LaboratoryService;
+import com.skillup.profilemanagementservice.models.Service;
 import com.skillup.profilemanagementservice.repositories.LabServiceRepository;
 import com.skillup.profilemanagementservice.repositories.LaboratoryRepository;
 import org.junit.jupiter.api.Test;
@@ -57,7 +60,27 @@ public class LabServiceTest {
     }
 
     @Test
-    void testGetLabServicesByLab() {}
+    void testGetLabServicesByLab() {
+        Laboratory laboratory = new Laboratory(1, "Test lab1", "123", "Test1");
+        Service service1 = new Service(1, "Test Service 1", 200.0);
+        Service service2 = new Service(2, "Test Service 2", 300.0);
+        Service service3 = new Service(3, "Test Service 3", 400.0);
+
+        List<LaboratoryService> laboratoryServices = Arrays.asList(
+                new LaboratoryService(1, laboratory, service1),
+                new LaboratoryService(2, laboratory, service2),
+                new LaboratoryService(3, laboratory, service3)
+        );
+
+        when(laboratoryRepository.findById(1)).thenReturn(Optional.of(laboratory));
+        when(labServiceRepository.findAllByLaboratory(Optional.of(laboratory)))
+                .thenReturn(Optional.of(laboratoryServices));
+
+        List<LaboratoryServiceDTO> laboratoryServiceDTOS = labService.getLabServicesByLab(1);
+
+        assertEquals(3, laboratoryServiceDTOS.size());
+        assertEquals(1, laboratoryServiceDTOS.get(0).getLaboratoryDTO().getId());
+    }
 
     @Test
     void testAddLabService() {}

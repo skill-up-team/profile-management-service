@@ -3,6 +3,7 @@ package com.skillup.profilemanagementservice.controllers;
 import com.skillup.profilemanagementservice.dto.LaboratoryDTO;
 import com.skillup.profilemanagementservice.dto.LaboratoryServiceDTO;
 import com.skillup.profilemanagementservice.services.LabService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class LabController {
     }
 
     @PostMapping("/service")
-    public ResponseEntity<HttpStatus> addLabService(@RequestBody LaboratoryServiceDTO laboratoryService) {
+    public ResponseEntity<HttpStatus> addLabService(@Valid @RequestBody LaboratoryServiceDTO laboratoryService) {
         labService.addLabService(laboratoryService);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
